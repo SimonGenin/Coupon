@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->boolean('seller')->default('false');
             $table->string('seller_name')->nullable();
+            $table->boolean("premium")->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
