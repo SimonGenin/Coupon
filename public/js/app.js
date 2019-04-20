@@ -1841,13 +1841,138 @@ __webpack_require__.r(__webpack_exports__);
 
     var map = new mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default.a.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: "mapbox://styles/michael-nicolaes/cjuot53fa8jwa1ftiratf0jh0",
       zoom: 16,
       center: [4.8605, 50.4664]
     });
-    var this_ref = this;
+    var incrId = 1;
+    var mapTimeId = new Map();
     map.on("load", function () {
-      function createGeoJSONCircle(center, radiusInKm, points) {
+      /*
+      * color : hexa code
+      *lat and long : format example : 50.4555   4.5555
+      *radius in km
+      *radiusColor in plain letters : 'blue', 'red', 'yellow', ...
+      *toggleRadius : boolean, true if you want the circle
+      */
+      map.addControl(new mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default.a.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      }));
+      var scale = new mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default.a.ScaleControl({
+        maxWidth: 80,
+        unit: 'metric'
+      });
+      map.addControl(scale);
+
+      function create_self(radius, latitude, longitude, radiusColor, toggleRadius) {
+        // ADD FUNCTION
+        var color = '#00F';
+        var position = {
+          lng: longitude,
+          lat: latitude
+        };
+        var marker = new mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default.a.Marker({
+          color: color
+        }).setLngLat(position).addTo(map);
+
+        if (toggleRadius) {
+          map.addSource("self", createGeoJSONCircle([position.lng, position.lat], radius));
+          console.log(listImages()[0]);
+          map.addLayer({
+            "id": "self",
+            "type": "fill",
+            "source": marker,
+            "layout": {},
+            "paint": {
+              "fill-color": radiusColor,
+              "fill-opacity": 0.2
+            }
+          });
+        }
+
+        return position;
+      }
+
+      function add_marker(radius, latitude, longitude, toggleRadius, title, premiumTitle, description, distance, endTime) {
+        // MODIFY PARAMETER
+        var position = {
+          lng: longitude,
+          lat: latitude
+        };
+        var popup = create_popup(position, title, premiumTitle, description, distance, endTime); // ADD
+
+        if (popup === "finished") {
+          return;
+        }
+
+        var time = calculTimeLeft(endTime);
+        var colorRadius;
+        var color;
+
+        if (time > 45) {
+          colorRadius = "green";
+          color = "#00FF00";
+        } else if (time > 20) {
+          colorRadius = "yellow";
+          color = "#FF0";
+        } else {
+          colorRadius = "red";
+          color = "#F00";
+        }
+
+        new mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default.a.Marker({
+          color: color
+        }).setLngLat(position).setPopup(popup) // ADD
+        .addTo(map);
+
+        if (toggleRadius) {
+          var id = "polygon" + incrId;
+          map.addSource(id, createGeoJSONCircle([position.lng, position.lat], radius));
+          map.addLayer({
+            "id": id,
+            "type": "fill",
+            "source": id,
+            "layout": {},
+            "paint": {
+              "fill-color": colorRadius,
+              "fill-opacity": 0.2
+            }
+          });
+        }
+
+        incrId++;
+      } // ADD FUNCTION
+
+
+      function create_popup(position, title, premiumTitle, description, distance, endTime) {
+        // thème personalisé peut être marrant (pas le time mais voilà quoi)
+        var timeLeft = calculTimeLeft(endTime);
+
+        if (timeLeft === 0) {
+          return "finished";
+        }
+
+        var html = "<h1>" + title + "</h1><h3>" + description + "</h3><p>L'établissement se situe à " + distance + " mètres. <br> Le coupon sera encore valable " + timeLeft + " minutes !</p>"; // title or premium title
+
+        var popup = new mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default.a.Popup({
+          offset: 25
+        }).setHTML(html);
+        return popup;
+      }
+
+      function calculTimeLeft(endTime) {
+        // ADD FUNCTION
+        var now = new Date(Date.now()).getTime();
+        var end = endTime.getTime();
+        var millis = end - now;
+        var result = Math.floor(millis / 1000 / 60);
+        return result < 0 ? 0 : result;
+      }
+
+      var createGeoJSONCircle = function createGeoJSONCircle(center, radiusInKm, points) {
         if (!points) points = 64;
         var coords = {
           latitude: center[1],
@@ -1880,44 +2005,14 @@ __webpack_require__.r(__webpack_exports__);
             }]
           }
         };
-      }
-
-      function add_marker(color, radius, latitude, longitude, radiusColor, toggleRadius) {
-        var position = {
-          lng: longitude,
-          lat: latitude
-        };
-        var marker = new mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default.a.Marker({
-          color: color
-        }).setLngLat(position).addTo(map);
-
-        if (toggleRadius) {
-          map.addSource("polygon", createGeoJSONCircle([position.lng, position.lat], radius));
-          map.addLayer({
-            "id": "polygon",
-            "type": "fill",
-            "source": "polygon",
-            "layout": {},
-            "paint": {
-              "fill-color": radiusColor,
-              "fill-opacity": 0.2
-            }
-          });
-        }
-      }
-      /*
-      * color : hexa code
-      *lat and long : format example : 50.4555   4.5555
-      *radius in km
-      *radiusColor in plain letters : 'blue', 'red', 'yellow', ...
-      *toggleRadius : boolean, true if you want the circle
-      */
-      //user's starting position
+      }; //user's starting position
 
 
-      add_marker('#FF0000', 0.05, 50.4664, 4.8605, 'purple', false); //mock bar promo
+      create_self(0.05, 50.4664, 4.8605, 'purple', false); // MODIFY
+      //mock bar promo //MODIFY // ATTENTION, GMT CASSE LES COUILLES DU COUP METTRE 2H EN MOINS QUE CE QU'ON VEUT
 
-      add_marker('#0000FF', 0.05, 50.4661, 4.8609, 'blue', true);
+      add_marker(0.05, 50.4661, 4.8609, true, "Maredsous blonde pour 1€", "osef", "Super match de foot fifa ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 10, 30, 30)));
+      add_marker(0.1, 50.4668, 4.8615, true, "Chimay bleue pour 1€", "osef", "Super match de tennis ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 13, 15, 30)));
     });
   }
 });
@@ -1955,7 +2050,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nbody { margin:0; padding:0;\n}\n#map { position:absolute; top:0; bottom:0; width:100%;\n}\n", ""]);
+exports.push([module.i, "\nbody {\n    margin: 0;\n    padding: 0;\n}\n#map {\n    position: absolute;\n    top: 0;\n    bottom: 0;\n    width: 100%;\n}\n", ""]);
 
 // exports
 
