@@ -1,6 +1,7 @@
 <?php
 
 use App\Tag;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -47,6 +48,23 @@ class DatabaseSeeder extends Seeder
 
         Tag::create([
             'name' => 'fourniture'
+        ]);
+
+        User::create([
+            'name' => 'Simon',
+            'email' => 'simongenin@hotmail.fr',
+            'password' => bcrypt('password'),
+            'seller' => false,
+            'premium' => false
+        ]);
+
+        User::create([
+            'name' => 'John',
+            'email' => 'john@hotmail.fr',
+            'password' => bcrypt('password'),
+            'seller' => true,
+            'seller_name' => "John's coffee",
+            'premium' => false
         ]);
 
     }

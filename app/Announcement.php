@@ -12,7 +12,7 @@ class Announcement extends Model
         return $this->hasOne(Coupon::class);
     }
 
-    public function tags() {
-        return $this->hasMany(Tag::class);
+    public function owner() {
+        return $this->belongsTo(User::class, 'owner_id');
     }
 }

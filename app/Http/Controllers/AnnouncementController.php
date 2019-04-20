@@ -35,7 +35,18 @@ class AnnouncementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        Announcement::create([
+            'title' => $request->get('title'),
+            'title_premium' => $request->get('title_premium'),
+            'description' => $request->get('description'),
+            'length' => $request->get('time'),
+            'distance' => $request->get('distance'),
+            'start' => now()
+        ]);
+
+        return redirect('/map');
+
     }
 
     /**

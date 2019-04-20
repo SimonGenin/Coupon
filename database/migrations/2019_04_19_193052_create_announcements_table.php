@@ -16,10 +16,12 @@ class CreateAnnouncementsTable extends Migration
         Schema::create('announcements', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string("title");
-            $table->text("description");
+            $table->string("title_premium");
+            $table->text("description")->nullable();
             $table->dateTime("start");
             $table->integer("length");
-            $table->temporary();
+            $table->integer("distance");
+            $table->integer("owner_id")->default(2);
             $table->timestamps();
         });
     }

@@ -23,15 +23,19 @@ Route::get("/test", function () {
 
 });
 
-Route::get('/annoucement/create', function () {
+Route::get('/announcement/create', function () {
 
-    return view('annoucement.create');
+    return view('announcement.create');
 
 });
+
+Route::post('/announcement', 'AnnouncementController@store')->name('announcement.store');
 
 Route::get('/map', function () {
 
     return view('map');
 
 });
+
+
 

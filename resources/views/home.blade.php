@@ -7,26 +7,31 @@
         <h1 class="text-xl">Les meilleures annonces</h1>
     </nav>
 
+    @foreach($announcements as $announcement)
 
-    <div class="bg-white rounded m-2 shadow text-black p-4">
+        <div class="bg-white rounded m-2 shadow text-black p-4">
 
-        <h4 class="mb-2">Une bière gratuite jusqu'a 18h</h4>
+            <h4 class="mb-2">{{ $announcement->title }}h</h4>
 
-        <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center">
 
-            <div class="text-xs text-grey-dark">
+                <div class="text-xs text-grey-dark">
 
-            <h6  class="text-xs mb-1" >Le Monde à l'envers</h6>
-            <h6  class="text-xs">500m</h6>
+                    <h6 class="text-xs mb-1">{{ $announcement->owner->seller_name }}</h6>
+                    <h6 class="text-xs">500m</h6>
 
+                </div>
+                <div>
+                    @foreach($announcement->owner->tags as $tag)
+                        <span
+                            class="uppercase font-bold text-xs bg-blue-dark px-2 py-1 rounded-sm text-white">{{ $tag->name }}</span>
+                    @endforeach
+                </div>
             </div>
-            <div>
-                <span class="uppercase font-bold text-xs bg-blue-dark px-2 py-1 rounded-sm text-white">bar</span>
-                <span class="uppercase font-bold text-xs bg-red-dark px-2 py-1 rounded-sm text-white">apero</span>
-            </div>
+
         </div>
 
-    </div>
+    @endforeach
 
     <!--
     <div class="bg-white rounded m-2 shadow text-black p-4">
