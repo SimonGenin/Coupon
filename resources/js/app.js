@@ -22,6 +22,16 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/antd.css'
+Vue.component('vue-slider', VueSlider);
+
+import CreateAnnouncement from './components/CreateAnnouncement'
+Vue.component('create-announcement', CreateAnnouncement);
+
+import Mapcomponent from './components/Mapcomponent'
+Vue.component('map-component', Mapcomponent);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

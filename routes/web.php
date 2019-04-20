@@ -23,3 +23,15 @@ Route::get("/test", function () {
 
 });
 
+Route::get('/annoucement/create', function () {
+
+    return view('annoucement.create');
+
+});
+
+Route::get('/map', function () {
+
+    return view('map');
+
+});
+
