@@ -7,6 +7,16 @@
         data() {
             return {
                 search_string: "",
+				existing_tags = ["bar", "snack", "sandwicherie"];
+				synonyms = new Map();
+				synonyms.set("bière", "bar");
+				synonyms.set("bières", "bar");
+				synonyms.set("vin", "bar");
+				synonyms.set("café", "bar");
+				synonyms.set("hot-dog", "snack");
+				synonyms.set("burger", "snack");
+				synonyms.set("sandwich", "sandwicherie");
+				synonyms.set("salade", "sandwicherie");
             }
         },
 
@@ -14,7 +24,15 @@
 
             process() {
 
-                this.search_string = ""
+				tags_output = new Array();
+                this.search_string = "Je cherche à boire une bière et manger un burger";
+				search_string.split(" ").forEach(function(val){
+					if(existing_tags.includes(val)){
+						tags_output.push(val);
+					} else if(synonyms.has(val)){
+							tags_output.push(synonyms.get(val));
+					}
+				});
 
             }
 
