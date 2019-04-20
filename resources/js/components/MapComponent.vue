@@ -4,6 +4,22 @@
 
     export default {
 
+        data() {
+            return {
+                search_string: ""
+            }
+        },
+
+        methods : {
+
+            process() {
+
+                this.search_string = ""
+
+            }
+
+        },
+
         mounted() {
 
             mapboxgl.accessToken = "pk.eyJ1IjoibWljaGFlbC1uaWNvbGFlcyIsImEiOiJjanVvZzlyd2MxZmpxNDRsOHR3dXk0YmJpIn0._X_UFrdUNI8xuQiJtZz71A";

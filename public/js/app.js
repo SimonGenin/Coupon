@@ -1825,6 +1825,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mapbox_gl__WEBPACK_IMPORTED_MODULE_0__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      search_string: ""
+    };
+  },
+  methods: {
+    process: function process() {
+      this.search_string = "";
+    }
+  },
   mounted: function mounted() {
     mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default.a.accessToken = "pk.eyJ1IjoibWljaGFlbC1uaWNvbGFlcyIsImEiOiJjanVvZzlyd2MxZmpxNDRsOHR3dXk0YmJpIn0._X_UFrdUNI8xuQiJtZz71A";
     /* Map: This represents the map on the page. */
