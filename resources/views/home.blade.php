@@ -11,20 +11,24 @@
 
         <div class="bg-white rounded m-2 shadow text-black p-4">
 
-            <h4 class="mb-2">{{ $announcement->title }}h</h4>
+            <h4 class="mb-1">{{ $announcement->title }}</h4>
+
+            <h4 class="mb-2 text-sm" style="color:#F0C6AC">{{ $announcement->title_premium }}</h4>
 
             <div class="flex justify-between items-center">
 
-                <div class="text-xs text-grey-dark">
+                    <div class="text-xs text-grey-dark">
 
-                    <h6 class="text-xs mb-1">{{ $announcement->owner->seller_name }}</h6>
-                    <h6 class="text-xs">500m</h6>
+                        <h6 class="text-xs mb-1">{{ $announcement->owner->seller_name }}</h6>
+                        <h6 class="text-xs">{{ $announcement->owner->distance_from_user }}m</h6>
 
-                </div>
+                    </div>
+
+
                 <div>
                     @foreach($announcement->owner->tags as $tag)
                         <span
-                            class="uppercase font-bold text-xs bg-blue-dark px-2 py-1 rounded-sm text-white">{{ $tag->name }}</span>
+                            class="uppercase font-bold text-xs bg-blue-dark px-2 py-1 mr-2 rounded-sm text-white">{{ $tag->name }}</span>
                     @endforeach
                 </div>
             </div>

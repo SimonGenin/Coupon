@@ -22,6 +22,9 @@ class CreateUsersTable extends Migration
             $table->boolean('seller')->default('false');
             $table->string('seller_name')->nullable();
             $table->boolean("premium")->default(false);
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
+            $table->integer('distance_from_user')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

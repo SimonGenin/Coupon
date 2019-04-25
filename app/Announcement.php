@@ -8,6 +8,8 @@ class Announcement extends Model
 {
     protected $guarded = [];
 
+    protected $with = ['owner'];
+
     public function coupon() {
         return $this->hasOne(Coupon::class);
     }

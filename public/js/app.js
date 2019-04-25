@@ -1825,14 +1825,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mapbox_gl__WEBPACK_IMPORTED_MODULE_0__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    'announcements': {
+      type: Array
+    }
+  },
   data: function data() {
     return {
-      search_string: ""
+      search_string: "",
+      existing_tags: ["bar", "snack", "sandwicherie"],
+      synonyms: {
+        "biere": "bar",
+        "vin": "bar",
+        "cafe": "bar",
+        "hot-dog": "snack",
+        "burger": "snack",
+        "sandwich": "sandwicherie",
+        "salade": "sandwicherie",
+        'nourriture': "restaurant",
+        "boire": "bar",
+        "manger": "restaurant"
+      },
+      tags_output: []
     };
   },
   methods: {
     process: function process() {
-      this.search_string = "";
+      var _this = this;
+
+      this.tags_output = [];
+      this.search_string.split(" ").forEach(function (word) {
+        if (word in _this.existing_tags) {
+          _this.tags_output.push(word);
+        } else if (word in _this.synonyms) {
+          _this.tags_output.push(_this.synonyms[word]);
+        }
+      });
     }
   },
   mounted: function mounted() {
@@ -1847,6 +1875,7 @@ __webpack_require__.r(__webpack_exports__);
     });
     var incrId = 1;
     var mapTimeId = new Map();
+    var this_ref = this;
     map.on("load", function () {
       /*
       * color : hexa code
@@ -1923,6 +1952,11 @@ __webpack_require__.r(__webpack_exports__);
           color = "#F00";
         }
 
+        if (longitude == 4.86091) {
+          colorRadius = "red";
+          color = "#F00";
+        }
+
         new mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default.a.Marker({
           color: color
         }).setLngLat(position).setPopup(popup) // ADD
@@ -1955,7 +1989,7 @@ __webpack_require__.r(__webpack_exports__);
           return "finished";
         }
 
-        var html = "<h1>" + title + "</h1><h3>" + description + "</h3><p>L'établissement se situe à " + distance + " mètres. <br> Le coupon sera encore valable " + timeLeft + " minutes !</p>"; // title or premium title
+        var html = "<h1>" + title + "</h1><br><h3>" + description + "</h3><p>L'établissement se situe à " + distance + " mètres. <br> Le coupon sera encore valable " + timeLeft + " minutes !</p>"; // title or premium title
 
         var popup = new mapbox_gl__WEBPACK_IMPORTED_MODULE_0___default.a.Popup({
           offset: 25
@@ -2008,11 +2042,26 @@ __webpack_require__.r(__webpack_exports__);
       }; //user's starting position
 
 
-      create_self(0.05, 50.4664, 4.8605, 'purple', false); // MODIFY
+      create_self(0.05, 50.46662, 4.86017, 'purple', false); // MODIFY
+      // 50.46662, 4.86017
       //mock bar promo //MODIFY // ATTENTION, GMT CASSE LES COUILLES DU COUP METTRE 2H EN MOINS QUE CE QU'ON VEUT
 
-      add_marker(0.05, 50.4661, 4.8609, true, "Maredsous blonde pour 1€", "osef", "Super match de foot fifa ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 10, 30, 30)));
-      add_marker(0.1, 50.4668, 4.8615, true, "Chimay bleue pour 1€", "osef", "Super match de tennis ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 13, 15, 30)));
+      /*
+      this_ref.announcements.forEach( element => {
+          add_marker(0.05, 50.4661, 4.8609, true, "Maredsous blonde pour 1€", "osef", "Super match de foot fifa ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 10, 30, 30)));
+      });
+      /*
+       */
+
+      this_ref.announcements.forEach(function (element) {
+        console.log(element.distance, "distance");
+        console.log(element.owner.distance_from_user, "distance from user"); // filter
+
+        if (parseFloat(element.distance) > parseFloat(element.owner.distance_from_user)) {
+          add_marker(element.distance / 1000, parseFloat(element.owner.latitude), parseFloat(element.owner.longitude), true, element.title, element.owner.seller_name, element.owner.seller_name, element.owner.distance_from_user, new Date(Date.UTC(2019, 3, 20, 20, 30, 30)));
+        }
+      }); // add_marker(0.05, 50.4661, 4.8609, true, "Maredsous blonde pour 1€", "osef", "Super match de foot fifa ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 10, 30, 30)));
+      // add_marker(0.1, 50.4668, 4.8615, true, "Chimay bleue pour 1€", "osef", "Super match de tennis ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 13, 15, 30)));
     });
   }
 });

@@ -33,7 +33,9 @@ Route::post('/announcement', 'AnnouncementController@store')->name('announcement
 
 Route::get('/map', function () {
 
-    return view('map');
+    $announcements = \App\Announcement::all();
+
+    return view('map', compact('announcements'));
 
 });
 

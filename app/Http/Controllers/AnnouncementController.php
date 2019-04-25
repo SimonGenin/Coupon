@@ -41,7 +41,7 @@ class AnnouncementController extends Controller
             'title_premium' => $request->get('title_premium'),
             'description' => $request->get('description'),
             'length' => $request->get('time'),
-            'distance' => $request->get('distance'),
+            'distance' => $request->get('distance') * 10,
             'start' => now()
         ]);
 

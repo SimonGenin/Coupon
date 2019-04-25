@@ -4,19 +4,30 @@
 
     export default {
 
+        props: {
+            'announcements': {
+                type: Array,
+            },
+
+        },
+
         data() {
             return {
                 search_string: "",
-				existing_tags = ["bar", "snack", "sandwicherie"];
-				synonyms = new Map();
-				synonyms.set("bière", "bar");
-				synonyms.set("bières", "bar");
-				synonyms.set("vin", "bar");
-				synonyms.set("café", "bar");
-				synonyms.set("hot-dog", "snack");
-				synonyms.set("burger", "snack");
-				synonyms.set("sandwich", "sandwicherie");
-				synonyms.set("salade", "sandwicherie");
+                existing_tags: ["bar", "snack", "sandwicherie"],
+                synonyms: {
+                    "biere": "bar",
+                    "vin": "bar",
+                    "cafe": "bar",
+                    "hot-dog": "snack",
+                    "burger": "snack",
+                    "sandwich": "sandwicherie",
+                    "salade": "sandwicherie",
+                    'nourriture': "restaurant",
+                    "boire": "bar",
+                    "manger": "restaurant"
+                },
+                tags_output: []
             }
         },
 
@@ -24,15 +35,20 @@
 
             process() {
 
-				tags_output = new Array();
-                this.search_string = "Je cherche à boire une bière et manger un burger";
-				search_string.split(" ").forEach(function(val){
-					if(existing_tags.includes(val)){
-						tags_output.push(val);
-					} else if(synonyms.has(val)){
-							tags_output.push(synonyms.get(val));
-					}
-				});
+                this.tags_output = []
+
+                this.search_string.split(" ").forEach(word => {
+
+                    if (word in this.existing_tags) {
+
+                        this.tags_output.push(word);
+
+                    } else if (word in this.synonyms) {
+
+                        this.tags_output.push(this.synonyms[word]);
+
+                    }
+                });
 
             }
 
@@ -53,6 +69,8 @@
             var incrId = 1;
 
             var mapTimeId = new Map();
+
+            let this_ref = this;
 
             map.on("load", function () {
 
@@ -120,6 +138,11 @@
                         color = "#F00";
                     }
 
+                    if (longitude == 4.86091) {
+                        colorRadius = "red";
+                        color = "#F00";
+                    }
+
                     new mapboxgl.Marker({color: color})
                         .setLngLat(position)
                         .setPopup(popup) // ADD
@@ -150,7 +173,7 @@
                     if (timeLeft === 0) {
                         return "finished";
                     }
-                    var html = "<h1>" + title + "</h1><h3>" + description + "</h3><p>L'établissement se situe à " + distance + " mètres. <br> Le coupon sera encore valable " + timeLeft + " minutes !</p>"	// title or premium title
+                    var html = "<h1>" + title + "</h1><br><h3>" + description + "</h3><p>L'établissement se situe à " + distance + " mètres. <br> Le coupon sera encore valable " + timeLeft + " minutes !</p>"	// title or premium title
                     var popup = new mapboxgl.Popup({offset: 25})
                         .setHTML(html);
                     return popup;
@@ -204,11 +227,30 @@
                 };
 
 //user's starting position
-                create_self(0.05, 50.4664, 4.8605, 'purple', false); // MODIFY
+                create_self(0.05, 50.46662, 4.86017, 'purple', false); // MODIFY
+                // 50.46662, 4.86017
 
 //mock bar promo //MODIFY // ATTENTION, GMT CASSE LES COUILLES DU COUP METTRE 2H EN MOINS QUE CE QU'ON VEUT
-                add_marker(0.05, 50.4661, 4.8609, true, "Maredsous blonde pour 1€", "osef", "Super match de foot fifa ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 10, 30, 30)));
-                add_marker(0.1, 50.4668, 4.8615, true, "Chimay bleue pour 1€", "osef", "Super match de tennis ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 13, 15, 30)));
+
+                /*
+                this_ref.announcements.forEach( element => {
+                    add_marker(0.05, 50.4661, 4.8609, true, "Maredsous blonde pour 1€", "osef", "Super match de foot fifa ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 10, 30, 30)));
+                });
+                /*
+                 */
+
+                this_ref.announcements.forEach(element => {
+
+                    console.log(element.distance, "distance")
+                    console.log(element.owner.distance_from_user, "distance from user")
+                    // filter
+                    if (parseFloat(element.distance) > parseFloat(element.owner.distance_from_user)) {
+                        add_marker(element.distance / 1000, parseFloat(element.owner.latitude), parseFloat(element.owner.longitude), true, element.title, element.owner.seller_name, element.owner.seller_name, element.owner.distance_from_user, new Date(Date.UTC(2019, 3, 20, 20, 30, 30)));
+                    }
+                });
+
+                // add_marker(0.05, 50.4661, 4.8609, true, "Maredsous blonde pour 1€", "osef", "Super match de foot fifa ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 10, 30, 30)));
+                // add_marker(0.1, 50.4668, 4.8615, true, "Chimay bleue pour 1€", "osef", "Super match de tennis ! <br> Venez boire un verre en notre compagnie :D", "42", new Date(Date.UTC(2019, 3, 20, 13, 15, 30)));
 
             });
 

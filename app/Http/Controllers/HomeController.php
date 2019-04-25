@@ -26,6 +26,10 @@ class HomeController extends Controller
 
         $announcements = Announcement::all();
 
+        $announcements = $announcements->filter(function ($value, $key) {
+            return $value->distance > $value->owner->distance_from_user;
+        });
+
         return view('home', compact('announcements'));
     }
 }

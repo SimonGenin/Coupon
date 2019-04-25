@@ -21,7 +21,7 @@ class CreateAnnouncementsTable extends Migration
             $table->dateTime("start");
             $table->integer("length");
             $table->integer("distance");
-            $table->integer("owner_id")->default(2);
+            $table->integer("owner_id")->default(3);
             $table->timestamps();
         });
     }
